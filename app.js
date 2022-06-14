@@ -21,10 +21,6 @@ const itemSchema = new mongoose.Schema({
   title:{
     type:String,
     required:[true, "please give a title"]
-  },
-  content:{
-    type:String,
-    required:[true, "please write list content"]
   }
 });
 //create a new db model
@@ -33,22 +29,20 @@ const Item = new mongoose.model("Item", itemSchema);
 //craete some documents for the new database
 
 const note1 = new Item({
-  title:"Day1",
-  content:"Some content for Day 1"
+  title:"Day1"
+
 })
 
 const note2 = new Item({
-  title:"Day2",
-  content:"Some content for Day 2"
+  title:"Day2"
 })
 const note3 = new Item({
-  title:"Day3",
-  content:"Some content for Day 3"
+  title:"Day3"
 })
 
-// Item.insertMany([note1, note2, note3], (err)=>{
-//   err?console.log(err):console.log("successfully added");;
-// })
+const defaultList= [note1, note2, note3]
+
+
 
 
 
@@ -61,6 +55,14 @@ app.get("/", function(req, res) {
 // const day = date.getDate();
 
 Item.find((err,results)=>{
+  if (results.length===0){
+    Item.insertMany(defaultList, (err)=>{
+      err?console.log(err):console.log("successfully added");;
+    })
+
+    res.redirect("/")
+
+  } else {}
   err?console.log(err):  res.render("list", {listTitle: "today", newListItems: results})
 });
 
@@ -70,15 +72,18 @@ Item.find((err,results)=>{
 
 app.post("/", function(req, res){
 
-  const item = req.body.newItem;
+  const itemName = req.body.newItem;
 
-  if (req.body.list === "Work") {
-    workItems.push(item);
-    res.redirect("/work");
-  } else {
-    items.push(item);
-    res.redirect("/");
-  }
+  const newitem = new Item({
+    title:itemName
+  })
+
+  newitem.save();
+
+  res.redirect("/")
+
+
+
 });
 
 app.get("/work", function(req,res){
