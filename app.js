@@ -46,9 +46,12 @@ const note3 = new Item({
   content:"Some content for Day 3"
 })
 
-Item.insertMany([note1, note2, note3], (err)=>{
-  err?console.log(err):console.log("successfully added");;
-})
+// Item.insertMany([note1, note2, note3], (err)=>{
+//   err?console.log(err):console.log("successfully added");;
+// })
+
+
+
 
 
 
@@ -57,7 +60,11 @@ app.get("/", function(req, res) {
 
 // const day = date.getDate();
 
-  res.render("list", {listTitle: "today", newListItems: items});
+Item.find((err,results)=>{
+  err?console.log(err):  res.render("list", {listTitle: "today", newListItems: results})
+});
+
+
 
 });
 
