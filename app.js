@@ -81,10 +81,15 @@ app.post("/", function(req, res){
   newitem.save();
 
   res.redirect("/")
-
-
-
 });
+
+app.post("/delete", (req,res)=>{
+  const checkedID = req.body.checkbox;
+  Item.deleteOne({_id:checkedID}, (err)=>{
+    err?console.log(err):console.log("successfully deleted")
+  });
+  res.redirect("/")
+})
 
 app.get("/work", function(req,res){
   res.render("list", {listTitle: "Work List", newListItems: workItems});
