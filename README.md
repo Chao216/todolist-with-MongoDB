@@ -3,7 +3,67 @@ title: Putting everything together. Note app with DB
 created: '2022-06-14T18:18:07.059Z'
 modified: '2022-06-14T22:06:30.354Z'
 ---
+## Update Deploy you app to heroku and mongoDB atlas
 
+you can visit the site from anywhere now
+
+check https://enigmatic-basin-72581.herokuapp.com/
+
+![Heroku](https://brand.heroku.com/static/media/heroku-logotype-vertical.f7e1193f.svg)         ![MongoDB](https://d3cy9zhslanhfa.cloudfront.net/media/3800C044-6298-4575-A05D5C6B7623EE37/4B45D0EC-3482-4759-82DA37D8EA07D229/thul-28DE482C-2D54-4FE1-BC7F23F34147DA57.png)
+
+### mongoDB Atlas tutorial
+
+you can register and create a free cluster on AWS, GCP or Azure.
+
+create a user and password for using atlas databse
+
+in you `app.js` modify the mongoose connection to something like
+
+note choose connect , and connect your application
+
+```
+mongodb+srv://admin-<username>:<password>@cluster0.qhfpx.mongodb.net/?retryWrites=true&w=majority
+```
+
+
+### heroku tutorial
+
+type `heroku login` on the terminal to login
+
+the use `heroku create` to create a heroku app on the coloud
+
+`touch Procfile` to create a Procfile
+
+and add `web: node app.js` to your Procfile
+
+change you app listen port to   
+```JavaScript
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 8000;
+}
+app.listen(port);
+```
+
+add the engine info to package.json file in your app folder below `licesne`
+```JavaScript
+"engines": {
+    "node": "14.x"
+  },
+```
+create a .gitignore file and ignore fowwling content
+```Git
+/node_modules
+npm-debug.log
+.DS_Store
+/*.env
+```
+
+push you app to heroku with `git push heroku main` here main is the branch you have
+
+
+
+----------
 # Putting everything together. Note app with DB
 
 install and require mongoose package
@@ -102,3 +162,4 @@ app.post("/delete", (req, res) => {
 
 
 ### to solve lower case and upper case issue , simple install and load `lodash` and `use _.capitalize()`
+--------------
