@@ -163,3 +163,5 @@ app.post("/delete", (req, res) => {
 
 ### to solve lower case and upper case issue , simple install and load `lodash` and `use _.capitalize()`
 --------------
+
+![noteapp](./public/noteapp.png)
