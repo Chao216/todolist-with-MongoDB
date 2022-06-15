@@ -35,7 +35,7 @@ you can update old code to the forEach method
 **Note! you use `<% %>` for array before `forEach()`, but you still need `<%= %>` for item.name inside `forEach`**
 
 
-## ***Please review this block of code tomorrow***
+## ~~***Please review this block of code tomorrow***~~
 ```JavaScript
 app.get("/:customerListName", (req, res) => { //here we use the express route params
     const customerListName = req.params.customerListName //we create a variable depends on user's enter
