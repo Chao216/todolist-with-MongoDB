@@ -63,3 +63,42 @@ app.get("/:customerListName", (req, res) => { //here we use the express route pa
 
 
 ```
+
+
+### to delete from different collections / different notelist, use if else
+
+if user from root route, do as normal, if not ,find the right db collections, and delete the items in collection array.
+
+```JavaScript
+app.post("/delete", (req, res) => {
+  const checkedID = req.body.checkbox;
+  const listName = req.body.listName; // we added a input in list EJS
+
+  if (listName === "today") { //is user from root route? if so delete and redirect to root
+    Item.deleteOne({
+      _id: checkedID
+    }, (err) => {
+      err ? console.log(err) : console.log("successfully deleted")
+    });
+    res.redirect("/")
+
+  } else { // if user deleted from another note list, try to find and delete with $pull operator from goose
+    List.findOneAndUpdate({
+      name: listName
+    }, {
+      $pull: {
+        items: {
+          _id: checkedID
+        }
+      }
+    }, (err, results) => {
+      // using pull on the items array, locate with _id field
+      !err ? res.redirect("/" + listName) : console.log(""); // redirect to where user is from and do nothing for else
+    })
+  }
+
+})
+```
+
+
+### to solve lower case and upper case issue , simple install and load `lodash` and `use _.capitalize()`
