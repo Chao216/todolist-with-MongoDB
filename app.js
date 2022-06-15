@@ -82,27 +82,53 @@ app.get("/", function(req, res) {
 
 });
 
-app.post("/", function(req, res) {
+app.post("/", function(req, res) { //because in list EJS, the submit button always act on "/" post
 
     const itemName = req.body.newItem;
+    const listName = req.body.list //we gave our submit button a name called list in list.EJS
 
     const newitem = new Item({
         title: itemName
     })
 
-    newitem.save();
 
-    res.redirect("/")
+
+    if (listName==="today"){// if submitted from default page, redirect to root route
+      newitem.save();
+
+      res.redirect("/")
+
+    } else {
+      List.findOne({name:listName}, (err,foundList)=>{//to cheak if already had such a list in DB
+        foundList.items.push(newitem);//items is an array as preveious defiend nested inside LIst
+        foundList.save(); //writing to our DB
+        res.redirect("/"+listName) //redirect to where click is from
+      })
+
+    }
+
+
 });
 
 app.post("/delete", (req, res) => {
     const checkedID = req.body.checkbox;
-    Item.deleteOne({
-        _id: checkedID
-    }, (err) => {
-        err ? console.log(err) : console.log("successfully deleted")
-    });
-    res.redirect("/")
+    const listName = req.body.listName; // we added a input in list EJS
+
+    if (listName==="today"){ //is user from root route? if so delete and redirect to root
+      Item.deleteOne({
+          _id: checkedID
+      }, (err) => {
+          err ? console.log(err) : console.log("successfully deleted")
+      });
+      res.redirect("/")
+
+    } else{// if user deleted from another note list, try to find and delete with $pull operator from goose
+      List.findOneAndUpdate({name:listName}, {$pull:{items:{_id:checkedID}}}, (err,results)=>{
+                                            // useing pull on the items array, locate with _id field
+        !err?res.redirect("/"+listName): console.log("");// redirect to where user is from and do nothing for else
+      })
+    }
+
 })
 
 app.get("/:customerListName", (req, res) => { //here we use the express route params
