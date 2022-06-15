@@ -37,29 +37,29 @@ you can update old code to the forEach method
 
 ## ***Please review this block of code tomorrow***
 ```JavaScript
-app.get("/:customerListName", (req, res) => {
-    const customerListName = req.params.customerListName
+app.get("/:customerListName", (req, res) => { //here we use the express route params
+    const customerListName = req.params.customerListName //we create a variable depends on user's enter
 
-    List.findOne({
+    List.findOne({ //to check if such a list exits with mongoose findOne
         name: customerListName
     }, (err, results) => {
-        if (!err) {
-            if (!results) {
-                const list = new List({
+        if (!err) { //if query no error happens
+            if (!results) { //if didin't find a result
+                const list = new List({ //create a new List document
                     name: customerListName,
                     items: defaultList
                 })
-                list.save();
-                res.redirect("/" + customerListName)
+                list.save(); //save documents to db
+                res.redirect("/" + customerListName)  //redirect to same route
             } else {
-                res.render("list", {
-                    listTitle: results.name,
-                    newListItems: results.items
+                res.render("list", {  //render with EJS emgine
+                    listTitle: results.name,  //the query results from findOne
+                    newListItems: results.items //also results from findOne method.
                 })
             }
         }
     })
 })
 
-```
 
+```
