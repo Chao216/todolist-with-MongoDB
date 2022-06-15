@@ -16,7 +16,7 @@ app.use(express.static("public"));
 
 
 //to connect or create a mongoDB databse
-mongoose.connect("mongodb+srv://admin-chao:Qaz1207wsx@cluster0.qhfpx.mongodb.net/todolistDB", {
+mongoose.connect("mongodb+srv://admin-<user>:<password>@cluster0.qhfpx.mongodb.net/todolistDB", {
   useNewUrlParser: true
 }) //we just created a new todolistDB database
 
